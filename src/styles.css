@@ -1,0 +1,22 @@
+.App {
+  font-family: sans-serif;
+  text-align: center;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0.2;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animation-reveal {
+  animation: reveal 250ms ease-in-out both;
+}
+
+.disabled:disabled {
+  background-color: #aaa;
+  color: #ccc;
+}
