@@ -1,39 +1,94 @@
-import { handleRequest } from "../../utils/HttpHandler";
-import routes from "../../utils/Routes";
+import { handleRequest } from '../../utils/HttpHandler';
+import routes from '../../utils/Routes';
+import { TaskService } from '../TaskService';
 
-// fetch all tasks.
-export const fetchAllTasks = () => handleRequest(() => fetch(routes.tasks.all));
+export default new TaskService({
+  // fetch all tasks.
+  fetchAllTasks: () => handleRequest(() => fetch(routes.tasks.all)),
+  // fetch single task by id.
+  fetchTaskById: (id) => handleRequest(() => fetch(routes.oneTask(id))),
+  // create new task.
+  createTask: (title) =>
+    handleRequest(() =>
+      fetch(routes.tasks.all, {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify({
+          title,
+        }),
+      }),
+    ),
+  // update a single task.
+  updateTask: (id, data) =>
+    handleRequest(() =>
+      fetch(routes.tasks.one(id), {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify({
+          status: data && data.status,
+        }),
+      }),
+    ),
+  // update a single task.
+  deleteTaskById: (id) =>
+    handleRequest(() =>
+      fetch(routes.tasks.one(id), {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      }),
+    ),
 
-// fetch single task by id.
-export const fetchTaskById = (id) =>
-  handleRequest(() => fetch(routes.oneTask(id)));
+  // fetch all subtasks.
+  fetchAllSubtasks: (parentTaskId) =>
+    handleRequest(() => fetch(routes.subtasks.all(parentTaskId))),
 
-// create new task.
-export const createTask = ({ title }) =>
-  handleRequest(() =>
-    fetch(routes.tasks.all, {
-      method: "post",
-      body: JSON.stringify({
-        title
-      })
-    })
-  );
+  // fetch single subtask by id.
+  fetchSubtaskById: (
+    { todo_id: parentTaskId, id: subtaskId } /* Subtask class type */,
+  ) => handleRequest(() => fetch(routes.subtasks.one(parentTaskId, subtaskId))),
 
-// update a single task.
-export const updateTask = (id, { status }) =>
-  handleRequest(() =>
-    fetch(routes.tasks.one(id), {
-      method: "put",
-      body: JSON.stringify({
-        status
-      })
-    })
-  );
+  // create new subtask.
+  createSubtask: (title, task /* Subtask class type */) =>
+    handleRequest(() =>
+      fetch(routes.subtasks.all(task.id), {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify({ title }),
+      }),
+    ),
 
-// update a single task.
-export const deleteTaskById = (id) =>
-  handleRequest(() =>
-    fetch(routes.tasks.one(id), {
-      method: "delete"
-    })
-  );
+  // update a single subtask.
+  updateSubtask: (
+    { id: subtaskId, todo_id: parentTaskId, status } /* Subtask class type */,
+  ) =>
+    handleRequest(() =>
+      fetch(routes.subtasks.one(parentTaskId, subtaskId), {
+        method: 'put',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+        body: JSON.stringify({
+          status,
+        }),
+      }),
+    ),
+
+  // update a single subtask.
+  deleteSubtaskById: ({ id: subtaskId, todo_id: parentTaskId }) =>
+    handleRequest(() =>
+      fetch(routes.subtasks.one(parentTaskId, subtaskId), {
+        method: 'delete',
+        headers: {
+          'Content-Type': 'application/json; charset=utf-8',
+        },
+      }),
+    ),
+});
