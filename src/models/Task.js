@@ -22,7 +22,7 @@ export function Task({
 }
 
 export function Subtask({ todo_id = null, ...rest }) {
-  console.log(rest);
+  
   Object.assign(this, new Task({ ...rest }));
   this.todo_id = todo_id;
 }
