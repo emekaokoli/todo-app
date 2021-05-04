@@ -13,6 +13,8 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 The backend runs on (http://localhost:4000/api/v1/tasks), please note for out of the box experience, this project is built with mock test data so you might really not need to connect the server unless you specifically need to persist the data in a db.
 
+the use the mock test in the Appjs file change "new TaskService(RESTTaskService)" by importing tasks from the memory folder then changeto new TaskService(tasks);
+
 
 ### `npm test`
 

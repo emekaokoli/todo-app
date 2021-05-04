@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { NewTask } from './components/NewTask';
 import { Tasks } from './components/Tasks';
 import { useTasks } from './hooks/useTasks';
@@ -8,15 +8,16 @@ import { TaskService } from './services/TaskService';
 import './styles.css';
 
 export default function App() {
-  const taskService = React.memo(new TaskService(RESTTaskService));
-  const { tasks, setTasks } = useTasks([]);
+    const taskService = new TaskService(RESTTaskService);
+    const { tasks, setTasks } = useTasks([]);
 
-  useEffect(() => {
+  useEffect( () => {
+  
     async function tasks() {
-      setTasks((await taskService.fetchAllTasks()) || []);
+        setTasks((await taskService.fetchAllTasks()) || []);
     }
     tasks();
-  }, [taskService, setTasks]);
+  }, []);
 
   const actions = {
     async onCreateTask(title) {
@@ -27,9 +28,9 @@ export default function App() {
   };
 
   return (
-    <TaskContext.Provider value={{ tasks, setTasks, taskService }}>
-      <div className='h-screen flex justify-center items-center'>
-        <div className='w-96 flex flex-col gap-6'>
+      <TaskContext.Provider value={{ tasks, setTasks, taskService }}>
+      <div className="h-screen flex justify-center items-center">
+        <div className="w-96 flex flex-col gap-6">
           <NewTask onCreateTask={actions.onCreateTask} />
           <Tasks />
         </div>
