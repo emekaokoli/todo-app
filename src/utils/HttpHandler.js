@@ -1,5 +1,5 @@
-export const validateAndGetData = (response) => {
-  const jsonBody = response.json();
+export const validateAndGetData = async (response) => {
+  const jsonBody = await response.json();
 
   if (!!jsonBody.error) throw Error(jsonBody.error);
   else return jsonBody.data;
@@ -8,5 +8,5 @@ export const validateAndGetData = (response) => {
 // handle any fetch request.
 export const handleRequest = async (requestFn) => {
   const response = await requestFn();
-  return validateAndGetData(response);
+  return await validateAndGetData(response);
 };
